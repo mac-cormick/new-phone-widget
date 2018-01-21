@@ -8,6 +8,7 @@ define(['jquery'], function($){
 			init: function() {
 					$.get('//'+window.location.host+'/private/api/contact_search.php?SEARCH=+79991112233', function(res){
 		      	console.log(res);
+		      	console.log(res);
 		      });
 				self.add_action('phone', function(data) {
 					self.crm_post (
