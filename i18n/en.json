@@ -1,0 +1,13 @@
+{
+    "widget":{
+        "name":"MyWidget",
+        "short_description":"Short description",
+        "description":"Full description",
+        "call_action":"Call"
+    },
+    "settings":{
+        "login":"User login",
+        "api_key":"API key",
+        "account":"Account"
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "widget":{
+            "name": "widget.name",
+            "description": "widget.description",
+            "short_description": "widget.short_description",
+            "code": "phone22_widget",
+            "secret_key": "0596d9c6e7769f5bdda5e3d3fcfb744225ad0a4bed91c61866434423cbd77543",
+            "version": "1.0.0",
+            "interface_version": 2,
+            "init_once": false,
+            "locale":[
+                    "ru",
+                    "en"
+                    ],
+            "installation": true
+            },
+    "locations":[
+            "everywhere"
+            ],
+    "settings":{
+                "login":{
+                        "name": "settings.login",
+                        "type": "text",
+                        "required": true,
+                        "id": "phonewid-login"
+                        },
+                "api_key":{
+                        "name": "settings.api_key",
+                        "type": "text",
+                        "required": true,
+                        "id": "phonewid-key"
+                        },
+                "account":{
+                        "name": "settings.account",
+                        "type": "text",
+                        "required": true,
+                        "id": "phonewid-account"
+                        }
+            }
+}
