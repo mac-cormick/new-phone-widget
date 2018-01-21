@@ -6,10 +6,9 @@ define(['jquery'], function($){
 				return true;
 			},
 			init: function() {
-					$.get('//'+window.location.host+'/private/api/contact_search.php?SEARCH=+79991112233', function(res){
-		      	console.log(res);
-		      	console.log(res);
-		      });
+				$.get('//'+window.location.host+'/private/api/contact_search.php?SEARCH=+79991112233', function(res){
+					console.log(res);
+				});
 				self.add_action('phone', function(data) {
 					self.crm_post (
 						'http://localhost/amophone/file.php',
@@ -29,14 +28,16 @@ define(['jquery'], function($){
 					var w_name = self.i18n('widget').name,
 					date_now = Math.ceil(Date.now()/1000),
 					lang = self.i18n('settings'),
+					text,
 					n_data = {
+						name: data.name,
 						from: data.from,
 						to: data.to,
 						duration: data.duration,
 						link: data.link,
-						text: w_name,
+						text: w_name+': '+ data.text,
 						date: date_now,
-						name: 'Анатолий'
+						id: data.id
 					};
 					/* Делаем проверку, существует ли ID контакта, совершающего входящий вызов */
         if (n_data.id > 0){     //Если ID существует, формируем ссылку на данный контакт в amoCRM
@@ -53,15 +54,21 @@ define(['jquery'], function($){
         AMOCRM.notifications.add_call(n_data);
       };
       /* Далее данные, имитирующие поступающую информацию  */
-      var notifications_data = {};
-      $.get('//'+window.location.host+'/private/api/contact_search.php?SEARCH=+79991112233', function(res){
-      	console.log(res);
-      	notifications_data.id = res.getElementsByTagName('id')[0].innerHTML;
-      	notifications_data.from = res.getElementsByTagName('name')[0].innerHTML;
-      	// notify_data.company = $(res).find('root > contacts > contact > company > name').eq(0).text();
-      	notifications_data.to = 'Анатолий Моляков';
-      });
-      self.add_call_notify(notifications_data);
+      self.make_call = function() {
+      	$.get('//'+window.location.host+'/private/api/contact_search.php?SEARCH=+79991112233', function(res){
+      		console.log(res);
+      		var notifications_data = {};
+      		notifications_data.id = res.getElementsByTagName('id')[0].innerHTML;
+      		notifications_data.name = res.getElementsByTagName('contact')[0].children[1].innerHTML;
+      		notifications_data.from = res.getElementsByTagName('phones')[0].children[0].children[0].innerHTML;
+      		notifications_data.to = res.getElementsByTagName('user')[0].children[1].innerHTML;
+      		notifications_data.duration = 60;
+      		notifications_data.link = 'https://example.com/dialog.mp3';
+      		notifications_data.text = 'Example text';
+      		self.add_call_notify(notifications_data);
+      	});
+      };
+      self.make_call();
     },
     bind_actions: function(){
     	return true;
