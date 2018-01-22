@@ -67,7 +67,7 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
 								}
 							}
 						};
-						$.post('https://cnst.amocrm.ru/private/api/v2/json/leads/set', lead_data, function(response) {
+						$.post('https://'+window.location.host+'/private/api/v2/json/leads/set', lead_data, function(response) {
 							var lead_id = response.response.leads.add[0].id;
 							if(lead_id != 0) {
 								if(data[0]['value'] != ""){
@@ -84,7 +84,7 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
 											}
 										}
 									};
-									$.post('https://cnst.amocrm.ru/private/api/v2/json/contacts/set', contact_data, function(response) {
+									$.post('https://'+window.location.host+'/private/api/v2/json/contacts/set', contact_data, function(response) {
 										var contact_id = response.response.contacts.add[0].id;
 									}, 'json');}
 									if(data[3]['value'] != ""){
@@ -100,7 +100,7 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
 												}
 											}
 										};
-										$.post('https://cnst.amocrm.ru/private/api/v2/json/tasks/set', task_data, function(response) {}, 'json');
+										$.post('https://'+window.location.host+'/private/api/v2/json/tasks/set', task_data, function(response) {}, 'json');
 									}
 									if(data[2]['value'] != ""){
 										note_data = {
@@ -115,7 +115,7 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
 												}
 											}
 										};
-										$.post('https://cnst.amocrm.ru/private/api/v2/json/notes/set', note_data, function(response) {}, 'json');
+										$.post('https://'+window.location.host+'/private/api/v2/json/notes/set', note_data, function(response) {}, 'json');
 									}
 								}
 							}, 'json');
@@ -198,7 +198,7 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
       self.make_call();
     },
     bind_actions: function(){
-    	setTimeout(self.call_result,30000); //устанавливаем задержку вызова функции результата звонка
+    	setTimeout(self.call_result,3000); //устанавливаем задержку вызова функции результата звонка
     	return true;
     },
     settings: function(){
