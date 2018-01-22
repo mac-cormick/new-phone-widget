@@ -2,47 +2,47 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
 	var CustomWidget = function () {
 		var self = this;
 
-		this.call_result = function() {
-				/* Составляем разметку формы вводы данных, которая будет отображаться в модальном окне */
-				var data = [];
-				data.push('<style type="text/css" style="display: none">'+
-					'input[type="text"] {'+
-					'border: 1px solid #696969;'+
-					'border-radius: 3px;'+
-					'-webkit-border-radius: 3px; //закругление углов (Google Chrome)'+
-					'-moz-border-radius: 3px; //закругление углов (FireFox)'+
-					'margin: 2px;'+
-					'padding: 2px'+
-					'}'+
-					'input[type=submit] {'+
-					'background-color: #20B2AA;'+
-					'border: 1px #008B8B;'+
-					'border-radius: 3px;'+
-					'padding: 3px'+
-					'}'+
-					'</style>'+
-					'<form method="post" name="lead_data" id="call_result_data">'+
-					'<label for="inputs">Результат звонка +7(999)888-77-66</label><br><br>' +
-					'<div id="inputs">'+
-					'<input id="contact" type="text" name="contact_name" placeholder="Имя контакта"><br><br>'+
-					'<input id="lead" type="text" name="lead_name" placeholder="Название сделки"><br><br>'+
-					'<input id="lead_note" type="text" name="note" placeholder="Примечание"><br><br>'+
-					'<label for="lead_task">Тип задачи</label><br>'+
-					'<select name="task_type">'+
-					'<option value=1>Связаться с клинетом</option>'+
-					'<option value=2>Звонок</option>'+
-					'<option value=3>Встреча</option>'+
-					'<option value=4>Письмо</option>'+
-					'</select><br><br>'+
-					'<label for="lead_task_text">Поставить задачу</label><br>'+
-					'<input id="lead_task_text" type="text" name="text" placeholder="Комментарий к задаче"><br><br>'+
-					'</div>'+
-					'<input type="submit" value="Сохранить">'+
-					'</form>');
-				modal = new Modal({
-					class_name: 'modal-window',
-					init: function ($modal_body) {
-						$modal_body
+		this.call_result = function(phone_number) {
+			/* Составляем разметку формы вводы данных, которая будет отображаться в модальном окне */
+			var data = [];
+			data.push('<style type="text/css" style="display: none">'+
+				'input[type="text"] {'+
+				'border: 1px solid #696969;'+
+				'border-radius: 3px;'+
+				'-webkit-border-radius: 3px; //закругление углов (Google Chrome)'+
+				'-moz-border-radius: 3px; //закругление углов (FireFox)'+
+				'margin: 2px;'+
+				'padding: 2px'+
+				'}'+
+				'input[type=submit] {'+
+				'background-color: #20B2AA;'+
+				'border: 1px #008B8B;'+
+				'border-radius: 3px;'+
+				'padding: 3px'+
+				'}'+
+				'</style>'+
+				'<form method="post" name="lead_data" id="call_result_data">'+
+				'<label for="inputs">Результат звонка'+phone_number+'</label><br><br>' +
+				'<div id="inputs">'+
+				'<input id="contact" type="text" name="contact_name" placeholder="Имя контакта"><br><br>'+
+				'<input id="lead" type="text" name="lead_name" placeholder="Название сделки"><br><br>'+
+				'<input id="lead_note" type="text" name="note" placeholder="Примечание"><br><br>'+
+				'<label for="lead_task">Тип задачи</label><br>'+
+				'<select name="task_type">'+
+				'<option value=1>Связаться с клинетом</option>'+
+				'<option value=2>Звонок</option>'+
+				'<option value=3>Встреча</option>'+
+				'<option value=4>Письмо</option>'+
+				'</select><br><br>'+
+				'<label for="lead_task_text">Поставить задачу</label><br>'+
+				'<input id="lead_task_text" type="text" name="text" placeholder="Комментарий к задаче"><br><br>'+
+				'</div>'+
+				'<input type="submit" value="Сохранить">'+
+				'</form>');
+			modal = new Modal({
+				class_name: 'modal-window',
+				init: function ($modal_body) {
+					$modal_body
 			      .trigger('modal:loaded') //запускает отображение модального окна
 			      .html(data)
 			      .trigger('modal:centrify')  //настраивает модальное окно
@@ -51,8 +51,8 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
 			    destroy: function () {
 			    }
 			  });
-				$('#call_result_data input[type="submit"]').click(function(e) {
-					e.preventDefault();
+			$('#call_result_data input[type="submit"]').click(function(e) {
+				e.preventDefault();
 					var data;   // переменная, которая будет содержать данные серилизации
 					data = $(this).parent('form').serializeArray();
 					setTimeout('$(".modal-body__close").trigger("click")',1000);
@@ -121,7 +121,7 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
 							}, 'json');
 					}
 				});
-			};
+		};
 
 		this.callbacks = {
 			render: function(){
@@ -189,16 +189,25 @@ define(['jquery', 'lib/components/base/modal'], function($, Modal){
       			notifications_data.duration = 60;
       			notifications_data.link = 'https://example.com/dialog.mp3';
       			notifications_data.text = 'Example text';
-      			self.add_call_notify(notifications_data);
       		} else {
       			console.log('No contact with this phone number');
+      			notifications_data.name = 'Unknown';
+      			notifications_data.from = 9999999999;
+      			notifications_data.to = 'Моляков Анатолий';
+      			notifications_data.element = { id: 1, type: "contact" };
+      			notifications_data.duration = 60;
+      			notifications_data.link = '#';
+      			notifications_data.text = 'Unknown contact calls';
+      			var number = notifications_data.from;
+      			setTimeout(self.call_result(number),3000);
       		}
+      		self.add_call_notify(notifications_data);
       	});
       };
       self.make_call();
     },
     bind_actions: function(){
-    	setTimeout(self.call_result,3000); //устанавливаем задержку вызова функции результата звонка
+    	// setTimeout(self.call_result,3000); //устанавливаем задержку вызова функции результата звонка
     	return true;
     },
     settings: function(){
