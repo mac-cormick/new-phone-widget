@@ -37,11 +37,11 @@ define(['jquery'], function($){
 						link: data.link,
 						text: w_name+': '+ data.text,
 						date: date_now,
-						id: data.id
+						element: data.element
 					};
 					/* Делаем проверку, существует ли ID контакта, совершающего входящий вызов */
-        if (n_data.id > 0){     //Если ID существует, формируем ссылку на данный контакт в amoCRM
-        	text = 'Вам звонит: '+n_data.name+'</br><a href="/contacts/detail/'+ n_data.id+'"> Перейти в карту контакта</a>';
+        if (n_data.element.id > 0){     //Если ID существует, формируем ссылку на данный контакт в amoCRM
+        	text = 'Вам звонит: '+n_data.name+'</br><a href="/contacts/detail/'+ n_data.element.id+'"> Перейти в карту контакта</a>';
         	n_data.text = text;
         	n_data.from = data.from;
         	if (n_data.from.length < 4){   //Проверка на внутренний номер
@@ -58,10 +58,11 @@ define(['jquery'], function($){
       	$.get('//'+window.location.host+'/private/api/contact_search.php?SEARCH=+79991112233', function(res){
       		console.log(res);
       		var notifications_data = {};
-      		notifications_data.id = res.getElementsByTagName('id')[0].innerHTML;
+      		var data_id = res.getElementsByTagName('id')[0].innerHTML;
       		notifications_data.name = res.getElementsByTagName('contact')[0].children[1].innerHTML;
       		notifications_data.from = res.getElementsByTagName('phones')[0].children[0].children[0].innerHTML;
       		notifications_data.to = res.getElementsByTagName('user')[0].children[1].innerHTML;
+      		notifications_data.element = { id: data_id, type: "contact" };
       		notifications_data.duration = 60;
       		notifications_data.link = 'https://example.com/dialog.mp3';
       		notifications_data.text = 'Example text';
@@ -82,28 +83,10 @@ define(['jquery'], function($){
     },
     destroy: function(){
 
-    },
-    contacts: {
-					//select contacts in list and clicked on widget name
-					selected: function(){
-						console.log('contacts');
-					}
-				},
-				leads: {
-					//select leads in list and clicked on widget name
-					selected: function(){
-						console.log('leads');
-					}
-				},
-				tasks: {
-					//select taks in list and clicked on widget name
-					selected: function(){
-						console.log('tasks');
-					}
-				}
-			};
-			return this;
-		};
+    }
+  };
+  return this;
+};
 
-		return CustomWidget;
-	});
+return CustomWidget;
+});
